@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  
+<mapper namespace="Item">
+
+	<select id="selectList" resultType="com.example.vo.ItemVO">
+		SELECT * FROM ITEM
+		ORDER BY ITEMNO DESC
+	</select>
+
+	
+	<select id = "count" resultType = "int">
+		SELECT COUNT(*) FROM ITEM
+	</select>
+	
+	<select id = "searchItem" parameterType = "String" resultType = "com.example.vo.ItemVO">
+		SELECT * FROM ITEM WHERE ITEMNAME LIKE '%' ||  #{txt} || '%'
+	</select>
+	<insert id = "insertItemBatch" parameterType = "java.util.List" >
+		INSERT ALL 
+			<foreach collection="list" item = "obj" separator = " ">
+    		INTO ITEM(ITEMNO, ITEMNAME, ITEMPRICE, ITEMQTY, ITEMDES, ITEMDATE)
+    		VALUES (MY_GET_SEQ_NUMBER, #{obj.itemname}, #{obj.itemprice}, #{obj.itemqty},#{obj.itemdes}, SYSDATE)
+			</foreach>
+			SELECT * FROM DUAL
+	</insert>
+	
+	<delete id="deleteItemBatch" parameterType="int">
+		DELETE FROM ITEM WHERE ITEMNO IN(
+		<foreach collection="array" item="tmp" separator=","> 
+			#{tmp}
+		</foreach>
+		)
+	</delete>
+	
+	<select id="selectItemWhere" parameterType="int" resultType="com.example.vo.ItemVO">
+	
+		SELECT * FROM ITEM WHERE ITEMNO IN(
+		<foreach collection="array" item="tmp" separator=","> 
+			#{tmp}
+		</foreach>
+		)
+
+	</select>
+	
+	<update id = "updateItemBatch" parameterType="java.util.List">
+		
+		<foreach collection = "list" item = "obj" separator=" ">
+		UPDATE ITEM SET
+		    ITEMNAME =(
+		        CASE 
+		            WHEN ITEMNO=#{obj.itemno} THEN #{obj.itemname}	        	
+			        END
+		    ), ITEMPRICE=(
+		        CASE 
+		            WHEN ITEMPRICE=#{obj.itemno} THEN #{obj.itemprice}
+		        END
+		    ), ITEMQTY=(
+		        CASE 
+		            WHEN ITEMQTY=#{obj.itemno} THEN #{obj.itemqty} 
+		        END
+		    ), ITEMDES=(
+		        CASE 
+		            WHEN ITEMDES=#{obj.itemno} THEN #{obj.itemdes}
+
+		        END
+		    )
+	
+		WHERE ITEMNO IN ( #{obj.itemno} )
+		</foreach>      
+	
+	</update>
+	
+	
+	
+</mapper>
