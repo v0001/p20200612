@@ -53,6 +53,7 @@ public class AdminController {
 			list.add(obj);
 		}
 		
+		aaaaa
 		iDAO.insertItemBatch(list);
 		
 		return "redirect:/admin/home"; //<a href="/admin/home">자동화</a>
