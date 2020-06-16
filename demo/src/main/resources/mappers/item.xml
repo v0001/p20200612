@@ -11,7 +11,6 @@
 		SELECT * FROM ITEM
 		ORDER BY ITEMNO DESC
 	</select>
-
 	
 	<select id = "count" resultType = "int">
 		SELECT COUNT(*) FROM ITEM
@@ -36,6 +35,11 @@
 		</foreach>
 		)
 	</delete>
+	
+	<delete id="deleteItemOne" parameterType="int">
+		DELETE FROM ITEM WHERE ITEMNO IN(#{tmp})
+	</delete>
+	
 	
 	<select id="selectItemWhere" parameterType="int" resultType="com.example.vo.ItemVO">
 	

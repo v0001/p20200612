@@ -35,5 +35,13 @@
 		SELECT USERID, USERNAME, PHONE FROM MEMBER
 		WHERE USERID=#{userid} AND PASSWORD=#{password}
 	</select>
+	
+	<delete id="deleteMemberBatch" parameterType="String">
+		DELETE FROM MEMBER WHERE USERID IN(
+		<foreach collection="array" item="tmp" separator=","> 
+			#{tmp}
+		</foreach>
+		)
+	</delete>
 
 </mapper>

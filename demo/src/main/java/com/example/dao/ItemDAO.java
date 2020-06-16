@@ -51,6 +51,10 @@ public class ItemDAO {
 		return sqlFactory.openSession().update("Item.updateItemBatch",itemno);
 	
 	}
+	public int deleteItemOne(int no) {
+		return sqlFactory.openSession().delete("Item.deleteItemOne",no);
+	}
+	
 
 
 }

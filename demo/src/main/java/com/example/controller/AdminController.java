@@ -16,7 +16,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.example.dao.ItemDAO;
+import com.example.dao.MemberDAO;
 import com.example.vo.ItemVO;
+import com.example.vo.MemberVO;
 
 @Controller
 @RequestMapping(value = "/admin")
@@ -24,6 +26,8 @@ public class AdminController {
 
 	@Autowired
 	private ItemDAO iDAO = null;
+	@Autowired
+	private MemberDAO mDAO = null;
 	
 	@RequestMapping(value = "/home")
 	public String home() {
@@ -131,67 +135,43 @@ public class AdminController {
 			obj.setItemdes(des[i]);
 			list.add(obj);
 		}
-
-
 			return "redirect:/admin/item";
+	}
 	
+	@RequestMapping(value="/memberlist")
+	public String memberList(Model model) {
+		
+		List<MemberVO> list = mDAO.selectMemberList();		
+		model.addAttribute("list", list);
+		return "/admin/memberlist";
+	}
+	
+	@RequestMapping(value="/memberlist", method = RequestMethod.POST)
+	public String memberBatch(@RequestParam("btn") String btn,
+			@RequestParam(value = "chk[]", required = false) String[] userid) {
+
+		if(btn.equals("일괄삭제")) {
+			mDAO.deleteMemberBatch(userid);
+		}
+		return "redirect:/admin/home";
+	}
+	
+	@RequestMapping(value = "/itemdeleteone")
+	public String itemdeleteone(
+			@RequestParam(value="no", defaultValue = "0") int no) {
+		
+		iDAO.deleteItemOne(no);
+		return "redirect:/admin/item";
+	}
+	
+	@RequestMapping(value="/itemorder")
+	public String itemorder() {
+
+		return "/admin/itemorder";
+		
 	}
 	
 	
+	
 }
-//package com.example.controller;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMethod;
-//import org.springframework.web.bind.annotation.RequestParam;
-//
-//import com.example.dao.ItemDAO;
-//import com.example.vo.ItemVO;
-//
-//@Controller
-//@RequestMapping(value = "/admin")
-//public class AdminController {
-//	
-//	@Autowired
-//	private ItemDAO iDAO = null;
-//	
-//	@RequestMapping(value = "/home")
-//	public String home() {
-//		return "/admin/home";
-//	}
-//	
-//	@RequestMapping(value = "/iteminsert")
-//	public String iteminsert() {
-//		return "/admin/iteminsert";
-//	}
-//	
-//	@RequestMapping(value = "/iteminsert", method = RequestMethod.POST)
-//	public String iteminsertpost(
-//			@RequestParam("name[]") String[] name,
-//			@RequestParam("price[]") int[] price,
-//			@RequestParam("qty[]") int[] qty,
-//			@RequestParam("content[]") String[] content) {
-//
-//		List<ItemVO> list = new ArrayList<ItemVO>();
-//		
-//		for(int i=0;i<name.length;i++) {
-//			ItemVO obj = new ItemVO();
-//			
-//			obj.setItemname(name[i]);
-//			obj.setItemprice(price[i]);
-//			obj.setItemqty(qty[i]);
-//			obj.setItemdes(content[i]);
-//			
-//			list.add(obj);
-//			
-//		}
-//		iDAO.insertItemBatch(list);
-//		return "redirect:/admin/home";
-//	}
-//
-//}
+

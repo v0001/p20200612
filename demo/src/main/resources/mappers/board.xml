@@ -24,8 +24,8 @@
 			FROM 
 				BOARD)
 		WHERE ROWN BETWEEN #{start} AND #{end}
-
 	</select>
+	
 	<select id = "count" resultType = "int">
 		SELECT COUNT(*) FROM BOARD
 	</select>

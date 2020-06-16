@@ -22,6 +22,7 @@
 					<th>상품설명</th>
 					<th>날짜 </th>
 
+
 				</tr>
 			</thead>
 			<tbody>
@@ -33,6 +34,7 @@
 					<td>${tmp.itemqty}</td>
 					<td>${tmp.itemdes}</td>
 					<td>${tmp.itemdate}</td>
+
 				</tr>
 				</c:forEach>
 			</tbody>							
@@ -51,6 +53,7 @@
 		</nav>
 	</div>
 	
+
 	
 	
 </body>
